@@ -1,10 +1,38 @@
-[gd_scene load_steps=11 format=3 uid="uid://dphoyd6u3mndi"]
+[gd_scene load_steps=16 format=3 uid="uid://dphoyd6u3mndi"]
 
 [ext_resource type="Texture2D" uid="uid://dqhxtwlln26ti" path="res://characters/player/sprites/main-anim.png" id="1_508ok"]
 [ext_resource type="Script" uid="uid://mhxkeung84h4" path="res://characters/player/scripts/player.gd" id="1_xxgcw"]
+[ext_resource type="Texture2D" uid="uid://e6hm42rl2rmd" path="res://characters/player/sprites/fishing-anim.png" id="3_exd8k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_508ok"]
 size = Vector2(16, 27)
+
+[sub_resource type="Animation" id="Animation_exd8k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Walk_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Fish_Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_xxgcw"]
 resource_name = "idle_down"
@@ -13,7 +41,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Walk_Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -22,20 +50,19 @@ tracks/0/keys = {
 "update": 1,
 "values": [0, 1, 1]
 }
-
-[sub_resource type="Animation" id="Animation_exd8k"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
+"values": [{
+"args": ["Walk_Sprite2D"],
+"method": &"set_active_sprite"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_5dc8e"]
@@ -45,7 +72,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Walk_Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -54,39 +81,19 @@ tracks/0/keys = {
 "update": 1,
 "values": [6, 5]
 }
-
-[sub_resource type="Animation" id="Animation_ixbpm"]
-resource_name = "walk_up"
-length = 0.5
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [17, 18]
-}
-
-[sub_resource type="Animation" id="Animation_c6leb"]
-resource_name = "walk_right"
-length = 0.5
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [9, 10]
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Walk_Sprite2D"],
+"method": &"set_active_sprite"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_dirf7"]
@@ -96,7 +103,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Walk_Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -105,10 +112,206 @@ tracks/0/keys = {
 "update": 1,
 "values": [13, 14]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Walk_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_c6leb"]
+resource_name = "walk_right"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Walk_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [9, 10]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Walk_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ixbpm"]
+resource_name = "walk_up"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Walk_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [17, 18]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Walk_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_idpv6"]
+resource_name = "fish_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fish_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [6, 7, 8]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Fish_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_rpf03"]
+resource_name = "fish_left"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fish_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [11, 12, 13]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Fish_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_x5dtk"]
+resource_name = "fish_down"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fish_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [1, 2, 3]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Fish_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_3t07l"]
+resource_name = "fish_up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fish_Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [16, 17, 18]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["Fish_Sprite2D"],
+"method": &"set_active_sprite"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5dc8e"]
 _data = {
 &"RESET": SubResource("Animation_exd8k"),
+&"fish_down": SubResource("Animation_x5dtk"),
+&"fish_left": SubResource("Animation_rpf03"),
+&"fish_right": SubResource("Animation_idpv6"),
+&"fish_up": SubResource("Animation_3t07l"),
 &"idle_down": SubResource("Animation_xxgcw"),
 &"walk_down": SubResource("Animation_5dc8e"),
 &"walk_left": SubResource("Animation_dirf7"),
@@ -123,7 +326,8 @@ script = ExtResource("1_xxgcw")
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_508ok")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Walk_Sprite2D" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("1_508ok")
 hframes = 4
 vframes = 5
@@ -132,3 +336,11 @@ vframes = 5
 libraries = {
 &"": SubResource("AnimationLibrary_5dc8e")
 }
+
+[node name="Fish_Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_exd8k")
+hframes = 5
+vframes = 4
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.3, 1.3)

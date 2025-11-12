@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dktdlbppwkoc4"]
+
+[ext_resource type="PackedScene" uid="uid://dphoyd6u3mndi" path="res://characters/player/player.tscn" id="2_ok6uh"]
+[ext_resource type="Texture2D" uid="uid://cu2jfoqstn0u5" path="res://items/fishing_float/base_fishing_float/sprites/standart-float.png" id="3_6k3wh"]
+
+[node name="FishingTest" type="Node2D"]
+
+[node name="StandartFloat" type="Sprite2D" parent="."]
+position = Vector2(-53, 21)
+texture = ExtResource("3_6k3wh")
+
+[node name="Player" parent="." instance=ExtResource("2_ok6uh")]
+position = Vector2(56, 18)
