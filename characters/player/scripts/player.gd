@@ -6,6 +6,11 @@ extends CharacterBody2D
 @export var min_cast_power: float = 1.0
 @export var max_cast_power: float = 100.0
 @export var charge_speed: float = 30.0 # how much cast power increases per second
+@export var max_cast_distance: float = 100.0 # max distance user can throw cast (bobber)
+@export var min_cast_distance: float = 40.0
+@export var equipped_bobber_scene: PackedScene   # the bobber the player uses now
+@export var bobber_lowering = 48 # Player height in pixels
+var current_bobber: Bobber = null   # runtime instance
 
 # ========== NODES ==========
 @onready var anim: AnimationPlayer = $AnimationPlayer
@@ -13,7 +18,7 @@ extends CharacterBody2D
 @onready var fish_sprite: Sprite2D = $Fish_Sprite2D
 
 # ========== STATE ==========
-enum State { IDLE, MOVING, FISH_CHARGING, FISH_CASTING }
+enum State { IDLE, MOVING, FISH_CHARGING, FISH_CASTING, FISHING }
 var state: State = State.IDLE
 
 var cast_power := 0.0
@@ -51,7 +56,7 @@ var fish_anims := {
 # ========== PROCESS ==========
 func _physics_process(delta):
 	match state:
-		State.FISH_CHARGING, State.FISH_CASTING:
+		State.FISH_CHARGING, State.FISH_CASTING, State.FISHING:
 			# disable movement while fishing
 			return
 		_:
@@ -100,7 +105,10 @@ func _play_walk(dir: String) -> void:
 
 # ========== FISHING ==========
 func _handle_fishing_input(delta):
-	# When left mouse is pressed — start casting (prepare to charge)
+	
+	# =====================
+	# START CAST (press)
+	# =====================
 	if Input.is_action_just_pressed("mouse_left") and state == State.IDLE:
 		state = State.FISH_CHARGING
 		cast_power = min_cast_power
@@ -109,29 +117,99 @@ func _handle_fishing_input(delta):
 		var anim_name = fish_anims.get(last_direction, "")
 		anim.play(anim_name)
 		anim.pause()
-		anim.seek(0.1) # stop at the casting preparation frame
+		anim.seek(0.1)
 
 		print("Started charging cast...")
+		return
 
-	# While holding — increase cast power
+	# =====================
+	# CHARGING
+	# =====================
 	if state == State.FISH_CHARGING and Input.is_action_pressed("mouse_left"):
 		cast_power = min(cast_power + charge_speed * delta, max_cast_power)
 		print("Charging: %.2f" % cast_power)
+		return
 
-	# On release — finish casting animation
+	# =====================
+	# RELEASE → CASTING
+	# =====================
 	if state == State.FISH_CHARGING and Input.is_action_just_released("mouse_left"):
 		state = State.FISH_CASTING
 		anim.play() # resume animation
 		print("Casting with power %.2f" % cast_power)
-		await anim.animation_finished
-		print("Cast animation finished.")
-		# TODO: spawn bobber here later
-		_finish_fishing()
 
-func _finish_fishing():
-	set_active_sprite("Walk_Sprite2D")
-	state = State.IDLE
-	cast_power = 0.0
+		await anim.animation_finished
+
+		_finish_fishing_casting_and_wait()
+		return
+
+	# =====================
+	# SECOND CLICK → RETRIEVE
+	# =====================
+	if state == State.FISHING and Input.is_action_just_pressed("mouse_left"):
+		print("Retrieving bobber...")
+
+		_despawn_bobber()
+
+		# TODO: play retrieve animation
+		set_active_sprite("Walk_Sprite2D")
+
+		state = State.IDLE
+		return
+
+func _finish_fishing_casting_and_wait():
+	# set fishing sprite, user remains in last frame fishing animation and waits for fish
+	state = State.FISHING
+
+	var spawn_pos = _get_bobber_cast_position()
+	_spawn_bobber_at(spawn_pos)
+
+	print("Bobber spawned. Waiting for fish...")
+	
+func _spawn_bobber_at(spawn_position: Vector2):
+	if not equipped_bobber_scene:
+		push_error("No bobber assigned!")
+		return
+
+	if current_bobber:
+		current_bobber.despawn()
+
+	var bobber := equipped_bobber_scene.instantiate()
+
+	# IMPORTANT: pass the target scene
+	var scene = get_tree().current_scene
+
+	bobber.spawn_at(spawn_position, scene)
+
+	current_bobber = bobber
+	print("Bobber spawned at:", spawn_position)
+	
+func _despawn_bobber():
+	if current_bobber:
+		current_bobber.despawn()
+		return;
+		
+func _get_bobber_cast_position() -> Vector2:
+	var power_ratio: float = cast_power / max_cast_power
+	var distance: float = power_ratio * max_cast_distance
+
+	distance = clamp(distance, min_cast_distance, max_cast_distance)
+
+	var offset := Vector2.ZERO
+	# we are lowering bobber to be in user foot height
+	var lowering_height: float = bobber_lowering * 0.25
+
+	match last_direction:
+		"up":
+			offset = Vector2(0, -distance)
+		"down":
+			offset = Vector2(0, distance)
+		"left":
+			offset = Vector2(-distance, lowering_height)
+		"right":
+			offset = Vector2(distance, lowering_height)
+
+	return global_position + offset
 
 # ========== SPRITE CONTROL ==========
 # Called from AnimationPlayer to enable only the desired sprite

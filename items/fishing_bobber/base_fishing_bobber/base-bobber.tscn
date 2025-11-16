@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7rm0flnfyyky"]
+
+[ext_resource type="Texture2D" uid="uid://dnbrxe0xec3fr" path="res://items/fishing_bobber/base_fishing_bobber/base-bobber.png" id="1_0wv2g"]
+[ext_resource type="Script" uid="uid://bse3rkiw3prxn" path="res://items/fishing_bobber/base_fishing_bobber/base-bobber.gd" id="2_wfvys"]
+
+[node name="BaseBobber" type="Node2D"]
+script = ExtResource("2_wfvys")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_0wv2g")
